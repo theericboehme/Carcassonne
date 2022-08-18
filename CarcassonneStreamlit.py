@@ -4,6 +4,7 @@ from PIL import Image
 import pandas as pd
 from io import BytesIO
 from datetime import date
+import xlsxwriter
 
 # site setup
 st.set_page_config(layout="wide")
