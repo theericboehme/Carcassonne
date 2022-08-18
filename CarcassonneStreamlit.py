@@ -31,7 +31,7 @@ dependencies = {
     "wirtshaus": "weg"
 }
 
-PATH_PICTURES = "C:/Users/eric_/Dropbox/PythonProjects/Carcassonne/Bilder/"
+PATH_PICTURES = "Bilder/"
 
 # load all images
 
