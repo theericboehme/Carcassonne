@@ -3,14 +3,14 @@ import numpy as np
 from PIL import Image
 import pandas as pd
 from io import BytesIO
-from datetime import date
 import xlsxwriter
+from datetime import date
 
 # site setup
 st.set_page_config(layout="wide", page_title='Carcassonne')
 st.title("Carcassonne Analytics")
 st.write("v1.0")
-#st.subheader("by Eric")
+st.caption("by Eric Waste-of-Time Ventures")
 
 # dictionary of all items
 items = {
@@ -31,7 +31,7 @@ dependencies = {
     "wirtshaus": "weg"
 }
 
-PATH_PICTURES = "Bilder/"
+PATH_PICTURES = "C:/Users/eric_/Dropbox/PythonProjects/Carcassonne/Bilder/"
 
 # load all images
 
@@ -46,6 +46,9 @@ if 'Setup' not in st.session_state:
     st.session_state['Setup'] = True
 # if st.session_state['Round'] > 1:
 #     st.session_state['Setup'] = False
+
+if 'alreadyPlayed' not in st.session_state:
+    st.session_state['alreadyPlayed'] = []
 
 # game preparations
 
@@ -134,6 +137,10 @@ def next_player():
     
     #st.session_state['showStatistics'] = False
 
+    # collect players that have already played (to make statistics available once everyone has played)
+    if st.session_state['previousPlayer'] not in st.session_state['alreadyPlayed']:
+        st.session_state['alreadyPlayed'].append(st.session_state['previousPlayer'])
+
     # increment round
     st.session_state['Round'] += 1
     
@@ -148,6 +155,10 @@ def same_player():
 
     st.session_state['previousPlayer'] = st.session_state['currentPlayer']
     #st.session_state['showStatistics'] = False
+
+    # collect players that have already played (to make statistics available once everyone has played)
+    if st.session_state['previousPlayer'] not in st.session_state['alreadyPlayed']:
+        st.session_state['alreadyPlayed'].append(st.session_state['previousPlayer'])
 
     # increment round
     st.session_state['Round'] += 1
@@ -221,7 +232,11 @@ with st.expander("Ongoing Game", expanded = st.session_state['ongoingGame']):
 
         col1, col2, col3, col4, col5 = st.columns(5)
 
-        EndGame = col1.form_submit_button("Pause/Finish Game", on_click = finishGame) 
+        if set(player_list) == set(st.session_state["alreadyPlayed"]):
+            PauseGame = col1.form_submit_button("Pause/End Game", on_click = finishGame) 
+        else:
+            col1.write("Statistics become available after everyone has played at least once")
+
         PlayAgain = col4.form_submit_button("Play again", on_click = same_player) 
         NextTurn = col5.form_submit_button("Next player", on_click = next_player)
 
@@ -237,7 +252,6 @@ with st.expander("Ongoing Game", expanded = st.session_state['ongoingGame']):
         for item in dependencies.keys():
             if temp_items[item] == 1:
                 temp_items[dependencies[item]] = True
-
 
         # add to totals
         # for item in temp_items.keys():
