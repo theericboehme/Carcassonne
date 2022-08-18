@@ -7,7 +7,7 @@ from datetime import date
 import xlsxwriter
 
 # site setup
-st.set_page_config(layout="wide")
+st.set_page_config(layout="wide", page_title='Carcassonne')
 st.title("Carcassonne Analytics")
 st.write("v1.0")
 #st.subheader("by Eric")
