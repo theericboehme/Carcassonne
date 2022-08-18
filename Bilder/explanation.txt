@@ -1,0 +1,1 @@
+Make sure that all the pictures are in png and correspond to the names in the backend
